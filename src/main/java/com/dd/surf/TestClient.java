@@ -40,6 +40,5 @@ public class TestClient {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 }
