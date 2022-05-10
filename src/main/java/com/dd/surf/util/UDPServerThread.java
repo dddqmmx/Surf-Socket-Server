@@ -23,9 +23,10 @@ public class UDPServerThread extends Thread {
     @Override
     public void run() {
         super.run();
-/*        */
 
         String info = new String(datagramPacket.getData(), 0, datagramPacket.getLength());
+
+        System.out.println(info);
 
         JSONObject requestJson = new JSONObject(info);
         String command = requestJson.getString("command");
@@ -36,15 +37,16 @@ public class UDPServerThread extends Thread {
             userName = requestJson.getString("userName");
             userPass = requestJson.getString("userPass");
             UserService userService = new UserServiceImpl();
-            boolean result = userService.login(userName,userPass);
+            boolean result = userService.existUser(userName,userPass);
             JSONObject repostJson = new JSONObject();
             repostJson.put("result",result);
-            send(repostJson.toString().getBytes(StandardCharsets.UTF_8));
+            send(repostJson.toString().getBytes());
         }
 
     }
 
-    private boolean send(byte[] data){
+    public boolean send(byte[] data){
+        System.out.println(new String(data));
         if (data == null){
             return false;
         }

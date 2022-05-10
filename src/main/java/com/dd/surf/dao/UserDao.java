@@ -1,5 +1,6 @@
 package com.dd.surf.dao;
 
 public interface UserDao {
-    int login(String userName, String userPass);
+    int existUser(String userName, String userPass);
+    int createUser(String userName, String userPass);
 }

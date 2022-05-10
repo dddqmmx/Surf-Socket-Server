@@ -11,6 +11,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean login(String userName, String userPass) {
-        return userDao.login(userName, userPass) > 0;
+        if (existUser(userName,userPass)){
+            return true;
+        }else{
+            return createUser(userName, userPass);
+        }
+    }
+
+    @Override
+    public boolean existUser(String userName, String userPass) {
+        return userDao.existUser(userName, userPass) > 0;
+    }
+
+    @Override
+    public boolean createUser(String userName, String userPass) {
+        return userDao.createUser(userName, userPass) > 0;
     }
 }

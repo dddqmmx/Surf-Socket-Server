@@ -7,18 +7,25 @@ import java.sql.ResultSet;
 
 public class UserDaoImpl extends BaseDao implements UserDao {
     @Override
-    public int login(String userName, String userPass) {
+    public int existUser(String userName, String userPass) {
         String sql = "select COUNT(*) as c from surf.user where userName = ? and userPass = ?";
         Object[] objects = {userName,userPass};
         ResultSet resultSet = executeQuery(sql,objects);
         int count = 0;
         try {
             while (resultSet.next()){
-                count = resultSet.getInt(resultSet.getInt("c"));
+                count = resultSet.getInt("c");
             }
         }catch (Exception e){
             e.printStackTrace();
         }
         return count;
+    }
+
+    @Override
+    public int createUser(String userName, String userPass) {
+        String sql = "insert into user (userName, userPass) values (?,?)";
+        Object[] objects = {userName,userPass};
+        return executeUpdate(sql,objects);
     }
 }
