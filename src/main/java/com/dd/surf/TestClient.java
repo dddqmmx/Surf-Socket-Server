@@ -1,6 +1,9 @@
 package com.dd.surf;
 
 
+import com.dd.surf.dao.UserDao;
+import com.dd.surf.dao.impl.UserDaoImpl;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -11,7 +14,8 @@ import java.net.UnknownHostException;
 
 public class TestClient {
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+        UserDao userDao = new UserDaoImpl();
+        /*// TODO Auto-generated method stub
         try {
             InetAddress  inetAddress = InetAddress.getByName("localhost");
             int port = 2077;
@@ -20,9 +24,9 @@ public class TestClient {
             DatagramSocket socket = new DatagramSocket();
             socket.send(packet);
 
-            /*
+            *//*
              * 接收服务器端的数据
-             */
+             *//*
             byte[] data2 = new byte[1024];
             DatagramPacket packet2 = new DatagramPacket(data2, data2.length);
             socket.receive(packet2);
@@ -39,6 +43,6 @@ public class TestClient {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        }*/
     }
 }
