@@ -2,7 +2,6 @@ package com.dd.surf.util;
 
 import com.dd.surf.service.UserService;
 import com.dd.surf.service.impl.UserServiceImpl;
-import com.mysql.cj.xdevapi.JsonArray;
 
 import org.json.JSONObject;
 import java.io.IOException;
@@ -10,7 +9,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.nio.charset.StandardCharsets;
 
 public class UDPServerThread extends Thread {
 
@@ -45,9 +43,10 @@ public class UDPServerThread extends Thread {
 
     }
 
-    public boolean send(byte[] data){
+    public boolean send(byte[] data) {
         System.out.println(new String(data));
         if (data == null){
+            System.out.println();
             return false;
         }
         InetAddress inetAddress = this.datagramPacket.getAddress();
