@@ -9,20 +9,24 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 public class UDPServerThread extends Thread {
 
 
     DatagramPacket datagramPacket = null;
-
-    public UDPServerThread(DatagramPacket packet) {
-        this.datagramPacket = packet;
+    String info = null;
+    InetAddress inetAddress = null;
+    int port = 0;
+    public UDPServerThread(DatagramPacket packet,String info,InetAddress inetAddress,int port) {
+        this.info = info;
+        this.inetAddress = inetAddress;
+        this.port = port;
     }
     @Override
     public void run() {
         super.run();
-
-        String info = new String(datagramPacket.getData(), 0, datagramPacket.getLength());
 
         System.out.println(info);
 
@@ -35,22 +39,19 @@ public class UDPServerThread extends Thread {
             userName = requestJson.getString("userName");
             userPass = requestJson.getString("userPass");
             UserService userService = new UserServiceImpl();
-            boolean result = userService.existUser(userName,userPass);
+            boolean result = userService.login(userName,userPass);
             JSONObject repostJson = new JSONObject();
             repostJson.put("result",result);
-            send(repostJson.toString().getBytes());
+            send(repostJson.toString().getBytes(StandardCharsets.UTF_8));
         }
 
     }
 
     public boolean send(byte[] data) {
-        System.out.println(new String(data));
         if (data == null){
-            System.out.println();
             return false;
         }
-        InetAddress inetAddress = this.datagramPacket.getAddress();
-        int port = this.datagramPacket.getPort();
+        System.out.println(new String(data));
         DatagramPacket datagramPacket =  new DatagramPacket(data, data.length, inetAddress,port);
         DatagramSocket socket = null;
         try {

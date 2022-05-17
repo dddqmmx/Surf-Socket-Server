@@ -3,7 +3,9 @@ package com.dd.surf.util;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 
 public class UDPServer extends Thread{
 
@@ -23,27 +25,23 @@ public class UDPServer extends Thread{
         DatagramPacket packet = new DatagramPacket(data, data.length);
 
         System.out.println(".....服务器准备启动......");
-        int count = 0;
 
         while(true)
         {
-
             try {
                 socket.receive(packet);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
+                
+                //packet信息不能在Thread获取原因未知
+                String info = new String(packet.getData(), 0, packet.getLength());
+                InetAddress inetAddress = packet.getAddress();
+                int port = packet.getPort();
+
+                UDPServerThread udpServerThread = new UDPServerThread(packet,info,inetAddress,port);
+                udpServerThread.start();
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            count++;
-
-            UDPServerThread udpServerThread = new UDPServerThread(packet);
-            udpServerThread.start();
-
-            String info = new String(data, 0, packet.getLength());
-            System.out.println("我是服务器,客户端说:" + info);
-            System.out.println("该客户端IP地址为:" + packet.getAddress());
-            System.out.println("客户端连接次数:" + count);
 
         }
     }

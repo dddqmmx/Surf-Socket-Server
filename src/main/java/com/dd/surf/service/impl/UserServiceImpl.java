@@ -27,4 +27,9 @@ public class UserServiceImpl implements UserService {
     public boolean createUser(String userName, String userPass) {
         return userDao.createUser(userName, userPass) > 0;
     }
+
+    @Override
+    public String getName(String userName) {
+        return null;
+    }
 }

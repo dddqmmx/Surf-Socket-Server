@@ -60,13 +60,13 @@ public class TestClient {
     public static void main(String[] args) {
         // TODO Auto-generated method stub
         try {
-            InetAddress  inetAddress = InetAddress.getByName("localhost");
+            InetAddress  inetAddress = InetAddress.getByName("39.107.229.253");
             int port = 2077;
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("command","login");
             jsonObject.put("userName","dddqmmx");
             jsonObject.put("userPass","liyan745921");
-            byte[] data = jsonObject.toString().getBytes();
+            byte[] data = jsonObject.toString().getBytes(StandardCharsets.UTF_8);
             //byte[] data = "用户名: 000;密码: 123".getBytes();
             DatagramPacket packet = new DatagramPacket(data, data.length,inetAddress,port);
             DatagramSocket socket = new DatagramSocket();
