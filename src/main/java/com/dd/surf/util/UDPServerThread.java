@@ -43,6 +43,13 @@ public class UDPServerThread extends Thread {
             JSONObject repostJson = new JSONObject();
             repostJson.put("result",result);
             send(repostJson.toString().getBytes(StandardCharsets.UTF_8));
+        } else if (command.equals("getName")){
+            userName = requestJson.getString("userName");
+            UserService userService = new UserServiceImpl();
+            String result = userService.getName(userName);
+            JSONObject repostJson = new JSONObject();
+            repostJson.put("name",result);
+            send(repostJson.toString().getBytes(StandardCharsets.UTF_8));
         }
 
     }

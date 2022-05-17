@@ -30,6 +30,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getName(String userName) {
-        return null;
+        return userDao.getName(userName);
     }
 }
