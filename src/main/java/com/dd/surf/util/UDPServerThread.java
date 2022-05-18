@@ -1,6 +1,9 @@
 package com.dd.surf.util;
 
+import com.dd.surf.pojo.Group;
+import com.dd.surf.service.GroupService;
 import com.dd.surf.service.UserService;
+import com.dd.surf.service.impl.GroupServiceImpl;
 import com.dd.surf.service.impl.UserServiceImpl;
 
 import org.json.JSONObject;
@@ -11,6 +14,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 
 public class UDPServerThread extends Thread {
 
@@ -31,27 +35,49 @@ public class UDPServerThread extends Thread {
         System.out.println(info);
 
         JSONObject requestJson = new JSONObject(info);
-        String command = requestJson.getString("command");
 
-        String userName,userPass = null;
+        String command = null, userName = null, userPass = null;
+        if (requestJson.getString("command") != null){
+            command = requestJson.getString("command");
+        }
+        if (requestJson.getString("userName") != null){
+            userName = requestJson.getString("userName");
+        }
+        if (requestJson.getString("userPass") != null){
+            userPass = requestJson.getString("userPass");
+        }
 
         if (command.equals("login")) {
-            userName = requestJson.getString("userName");
-            userPass = requestJson.getString("userPass");
             UserService userService = new UserServiceImpl();
             boolean result = userService.login(userName,userPass);
             JSONObject repostJson = new JSONObject();
             repostJson.put("result",result);
-            send(repostJson.toString().getBytes(StandardCharsets.UTF_8));
+            send(repostJson);
         } else if (command.equals("getName")){
-            userName = requestJson.getString("userName");
             UserService userService = new UserServiceImpl();
             String result = userService.getName(userName);
             JSONObject repostJson = new JSONObject();
             repostJson.put("name",result);
-            send(repostJson.toString().getBytes(StandardCharsets.UTF_8));
+            send(repostJson);
+        } else if (command.equals("getGroupList")){
+            GroupService groupService = new GroupServiceImpl();
+            List<Group> groupList = groupService.getGroupList(userName,userPass);
+            JSONObject repostJson = new JSONObject();
+            for (Group group:groupList){
+                String[] groupInfo = {group.getGroupName(),group.getGroupHead()};
+                repostJson.put(String.valueOf(group.getId()),groupInfo);
+            }
+            send(repostJson);
         }
 
+    }
+
+    public boolean send(JSONObject data){
+        return send(data.toString());
+    }
+
+    public boolean send(String data){
+        return send(data.getBytes(StandardCharsets.UTF_8));
     }
 
     public boolean send(byte[] data) {
