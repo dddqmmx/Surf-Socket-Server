@@ -1,10 +1,7 @@
 package com.dd.surf;
 
 
-import com.dd.surf.dao.UserDao;
-import com.dd.surf.dao.impl.UserDaoImpl;
-import com.dd.surf.service.UserService;
-import com.dd.surf.service.impl.UserServiceImpl;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -82,7 +79,8 @@ public class TestClient {
 
             JSONObject jsonObject1 = new JSONObject(reply);
             for (String str : jsonObject1.keySet()){
-                System.out.println(str);
+                JSONArray array = jsonObject1.getJSONArray(str);
+                System.out.println(array.get(0)+"="+array.get(1));
             }
 
             System.out.println("我是客户端,服务器说:"+reply);

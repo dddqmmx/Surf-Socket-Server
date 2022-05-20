@@ -37,13 +37,13 @@ public class UDPServerThread extends Thread {
         JSONObject requestJson = new JSONObject(info);
 
         String command = null, userName = null, userPass = null;
-        if (requestJson.getString("command") != null){
+        if (requestJson.has("command")){
             command = requestJson.getString("command");
         }
-        if (requestJson.getString("userName") != null){
+        if (requestJson.has("userName")){
             userName = requestJson.getString("userName");
         }
-        if (requestJson.getString("userPass") != null){
+        if (requestJson.has("userPass")){
             userPass = requestJson.getString("userPass");
         }
 
