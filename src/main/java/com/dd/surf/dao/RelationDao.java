@@ -6,5 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface RelationDao {
-    List<Relation> getRelationList(String userName,String userPass);
+    List<Relation> getFriendList(String userName,String userPass);
+    List<Relation> gerFriendRequestList(String userName,String userPass);
 }

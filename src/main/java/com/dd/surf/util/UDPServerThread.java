@@ -83,7 +83,14 @@ public class UDPServerThread extends Thread {
             }
             send(repostJson);
         } else if (command.equals("getFriendList")){
-            List<Relation> relationList = relationService.getRelationList(userName,userPass);
+            List<Relation> relationList = relationService.getFriendList(userName,userPass);
+            JSONArray jsonArray = new JSONArray();
+            for (Relation relation:relationList){
+                jsonArray.put(relation.getOtherSideId());
+            }
+            send(jsonArray.toString());
+        } else if (command.equals("getFriendRequestList")){
+            List<Relation> relationList = relationService.gerFriendRequestList(userName,userPass);
             JSONArray jsonArray = new JSONArray();
             for (Relation relation:relationList){
                 jsonArray.put(relation.getOtherSideId());

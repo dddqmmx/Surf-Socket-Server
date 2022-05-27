@@ -12,7 +12,12 @@ public class RelationServiceImpl implements RelationService {
     RelationDao relationDao = new RelationDaoImpl();
 
     @Override
-    public List<Relation> getRelationList(String userName, String userPass) {
-        return relationDao.getRelationList(userName, userPass);
+    public List<Relation> getFriendList(String userName, String userPass) {
+        return relationDao.getFriendList(userName, userPass);
+    }
+
+    @Override
+    public List<Relation> gerFriendRequestList(String userName, String userPass) {
+        return relationDao.gerFriendRequestList(userName, userPass);
     }
 }
