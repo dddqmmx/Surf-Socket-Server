@@ -1,11 +1,15 @@
 package com.dd.surf.util;
 
 import com.dd.surf.pojo.Group;
+import com.dd.surf.pojo.Relation;
 import com.dd.surf.service.GroupService;
+import com.dd.surf.service.RelationService;
 import com.dd.surf.service.UserService;
 import com.dd.surf.service.impl.GroupServiceImpl;
+import com.dd.surf.service.impl.RelationServiceImpl;
 import com.dd.surf.service.impl.UserServiceImpl;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -36,9 +40,13 @@ public class UDPServerThread extends Thread {
 
         JSONObject requestJson = new JSONObject(info);
 
+        int id = 0;
         String command = null, userName = null, userPass = null;
         if (requestJson.has("command")){
             command = requestJson.getString("command");
+        }
+        if (requestJson.has("id")){
+            id = requestJson.getInt("id");
         }
         if (requestJson.has("userName")){
             userName = requestJson.getString("userName");
@@ -47,20 +55,26 @@ public class UDPServerThread extends Thread {
             userPass = requestJson.getString("userPass");
         }
 
+        UserService userService = new UserServiceImpl();
+        GroupService groupService = new GroupServiceImpl();
+        RelationService relationService = new RelationServiceImpl();
+
         if (command.equals("login")) {
-            UserService userService = new UserServiceImpl();
             boolean result = userService.login(userName,userPass);
             JSONObject repostJson = new JSONObject();
             repostJson.put("result",result);
             send(repostJson);
-        } else if (command.equals("getName")){
-            UserService userService = new UserServiceImpl();
-            String result = userService.getName(userName);
+        } else if (command.equals("getNameByUserId")){;
+            String result = userService.getNameById(id);
+            JSONObject repostJson = new JSONObject();
+            repostJson.put("name",result);
+            send(repostJson);
+        } else if (command.equals("getNameByUserName")){
+            String result = userService.getNameByUserName(userName);
             JSONObject repostJson = new JSONObject();
             repostJson.put("name",result);
             send(repostJson);
         } else if (command.equals("getGroupList")){
-            GroupService groupService = new GroupServiceImpl();
             List<Group> groupList = groupService.getGroupList(userName,userPass);
             JSONObject repostJson = new JSONObject();
             for (Group group:groupList){
@@ -68,6 +82,13 @@ public class UDPServerThread extends Thread {
                 repostJson.put(String.valueOf(group.getId()),groupInfo);
             }
             send(repostJson);
+        } else if (command.equals("getFriendList")){
+            List<Relation> relationList = relationService.getRelationList(userName,userPass);
+            JSONArray jsonArray = new JSONArray();
+            for (Relation relation:relationList){
+                jsonArray.put(relation.getOtherSideId());
+            }
+            send(jsonArray.toString());
         }
 
     }

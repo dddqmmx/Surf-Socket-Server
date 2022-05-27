@@ -29,7 +29,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getName(String userName) {
-        return userDao.getName(userName);
+    public String getNameByUserName(String userName) {
+        return userDao.getNameByUserName(userName);
+    }
+
+    @Override
+    public String getNameById(int id) {
+        return userDao.getNameById(id);
     }
 }
