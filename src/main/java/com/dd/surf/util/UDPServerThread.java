@@ -64,10 +64,10 @@ public class UDPServerThread extends Thread {
             JSONObject repostJson = new JSONObject();
             repostJson.put("result",result);
             send(repostJson);
-        } else if (command.equals("getNameByUserId")){;
+        } else if (command.equals("getNameByUserId")) {
             String result = userService.getNameById(id);
             JSONObject repostJson = new JSONObject();
-            repostJson.put("name",result);
+            repostJson.put("name", result);
             send(repostJson);
         } else if (command.equals("getNameByUserName")){
             String result = userService.getNameByUserName(userName);
@@ -96,6 +96,16 @@ public class UDPServerThread extends Thread {
                 jsonArray.put(relation.getOtherSideId());
             }
             send(jsonArray.toString());
+        }else if (command.equals("getGroupNameById")){
+            String result = groupService.getGroupNameById(id);
+            JSONObject repostJson = new JSONObject();
+            repostJson.put("name",result);
+            send(repostJson);
+        }else if (command.equals("getUserId")){
+            int result = userService.getUserId(userName,userPass);
+            JSONObject repostJson = new JSONObject();
+            repostJson.put("id",result);
+            send(repostJson);
         }
 
     }

@@ -60,9 +60,8 @@ public class TestClient {
             InetAddress  inetAddress = InetAddress.getByName("127.0.0.1");
             int port = 2077;
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("command","getFriendList");
-            jsonObject.put("userName","dddqmmx");
-            jsonObject.put("userPass","liyan745921");
+            jsonObject.put("command","getGroupNameById");
+            jsonObject.put("id","1");
             byte[] data = jsonObject.toString().getBytes(StandardCharsets.UTF_8);
             //byte[] data = "用户名: 000;密码: 123".getBytes();
             DatagramPacket packet = new DatagramPacket(data, data.length,inetAddress,port);
@@ -82,10 +81,7 @@ public class TestClient {
                 JSONArray array = jsonObject1.getJSONArray(str);
                 System.out.println(array.get(0)+"="+array.get(1));
             }*/
-            JSONArray jsonArray = new JSONArray(reply);
-            for (Object id:jsonArray){
-                System.out.println(id);
-            }
+
 
             System.out.println("我是客户端,服务器说:"+reply);
             socket.close();

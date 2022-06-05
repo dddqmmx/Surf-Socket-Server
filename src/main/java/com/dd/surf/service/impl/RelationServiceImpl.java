@@ -1,7 +1,7 @@
 package com.dd.surf.service.impl;
 
 import com.dd.surf.dao.RelationDao;
-import com.dd.surf.dao.impl.RelationDaoImpl;
+import com.dd.surf.RelationDaoImpl;
 import com.dd.surf.pojo.Relation;
 import com.dd.surf.service.RelationService;
 

@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
 group 'com.dd'
@@ -12,8 +13,21 @@ repositories {
 dependencies {
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
     implementation group: 'org.json', name: 'json', version: '20210307'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+}
+
+
+jar {
+    String runtimePath = ''
+    configurations.runtimeClasspath. each {runtimePath = runtimePath + " lib//" +it.name} // 本地lib
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } // implementation 相关的引入解压并打包入新的jar中
+    }
+    manifest {
+        attributes 'Main-Class' : 'com.dd.surf.Main' // 设置启动类路径
+        attributes 'Class-Path' : runtimePath
+    }
 }
 
 test {

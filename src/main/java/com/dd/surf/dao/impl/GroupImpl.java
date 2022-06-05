@@ -11,6 +11,21 @@ import java.util.List;
 public class GroupImpl extends BaseDao implements GroupDao {
 
     @Override
+    public String getGroupNameById(int id) {
+        String sql = "select groupName from `group` where id = ?";
+        Object[] objects = {id};
+        ResultSet resultSet = executeQuery(sql,objects);
+        try {
+            while (resultSet.next()){
+                return resultSet.getString("groupName");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "error";
+    }
+
+    @Override
     public List<Group> getGroupList(String userName, String password) {
         String sql = "select g.id as id,g.groupName as groupName,g.groupHead as groupHead from `group` as g left join groupmember as gm on g.id = gm.groupId where gm.userId in (select user.id from user where userName = ? and  userPass = ?)";
         Object[] objects = {userName,password};

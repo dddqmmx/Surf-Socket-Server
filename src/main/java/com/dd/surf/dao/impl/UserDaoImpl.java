@@ -30,6 +30,21 @@ public class UserDaoImpl extends BaseDao implements UserDao {
     }
 
     @Override
+    public int getUserId(String userName, String userPass) {
+        String sql = "select id from user where userName = ? and userPass = ?";
+        Object[] objects = {userName,userPass};
+        ResultSet resultSet = executeQuery(sql,objects);
+        try {
+            while (resultSet.next()){
+                return resultSet.getInt("id");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
     public String getNameByUserName(String userName){
         String sql = "select name from surf.user where userName = ?";
         Object[] objects = {userName};

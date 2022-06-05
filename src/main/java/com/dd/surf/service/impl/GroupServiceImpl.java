@@ -12,6 +12,11 @@ public class GroupServiceImpl implements GroupService {
     GroupDao groupDao = new GroupImpl();
 
     @Override
+    public String getGroupNameById(int id) {
+        return groupDao.getGroupNameById(id);
+    }
+
+    @Override
     public List<Group> getGroupList(String userName, String password) {
         return groupDao.getGroupList(userName, password);
     }
