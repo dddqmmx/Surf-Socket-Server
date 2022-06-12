@@ -1,11 +1,14 @@
 package com.dd.surf.util;
 
 import com.dd.surf.pojo.Group;
+import com.dd.surf.pojo.Message;
 import com.dd.surf.pojo.Relation;
 import com.dd.surf.service.GroupService;
+import com.dd.surf.service.MessageService;
 import com.dd.surf.service.RelationService;
 import com.dd.surf.service.UserService;
 import com.dd.surf.service.impl.GroupServiceImpl;
+import com.dd.surf.service.impl.MessageServiceImpl;
 import com.dd.surf.service.impl.RelationServiceImpl;
 import com.dd.surf.service.impl.UserServiceImpl;
 
@@ -18,7 +21,9 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UDPServerThread extends Thread {
 
@@ -40,7 +45,7 @@ public class UDPServerThread extends Thread {
 
         JSONObject requestJson = new JSONObject(info);
 
-        int id = 0;
+        int id = 0,contactType = 0,contactId = 0,startRow = 0,showRow = 0;
         String command = null, userName = null, userPass = null;
         if (requestJson.has("command")){
             command = requestJson.getString("command");
@@ -54,10 +59,23 @@ public class UDPServerThread extends Thread {
         if (requestJson.has("userPass")){
             userPass = requestJson.getString("userPass");
         }
+        if (requestJson.has("contactType")){
+            contactType = requestJson.getInt("contactType");
+        }
+        if (requestJson.has("contactId")){
+            contactId = requestJson.getInt("contactId");
+        }
+        if (requestJson.has("startRow")){
+            startRow = requestJson.getInt("startRow");
+        }
+        if (requestJson.has("showRow")){
+            showRow = requestJson.getInt("showRow");
+        }
 
         UserService userService = new UserServiceImpl();
         GroupService groupService = new GroupServiceImpl();
         RelationService relationService = new RelationServiceImpl();
+        MessageService messageService = new MessageServiceImpl();
 
         if (command.equals("login")) {
             boolean result = userService.login(userName,userPass);
@@ -105,6 +123,26 @@ public class UDPServerThread extends Thread {
             int result = userService.getUserId(userName,userPass);
             JSONObject repostJson = new JSONObject();
             repostJson.put("id",result);
+            send(repostJson);
+        }else if (command.equals("getMessageCount")){
+            int result = messageService.getMessageCount(contactType,contactId);
+            JSONObject repostJson = new JSONObject();
+            repostJson.put("count",result);
+            send(repostJson);
+        }else if (command.equals("getMessageList")){
+            List<Message> messageList = messageService.getMessageList(contactType,contactId,startRow,showRow);
+            JSONObject repostJson = new JSONObject();
+            for (Message message : messageList){
+                System.out.println("has the message in the list");
+                Map<String,Object> messageInfoMap = new HashMap<>();
+                messageInfoMap.put("senderId",message.getSenderId());
+                messageInfoMap.put("contactType",message.getContactType());
+                messageInfoMap.put("contactId",message.getContactId());
+                messageInfoMap.put("messageType",message.getMessageType());
+                messageInfoMap.put("message",message.getMessage());
+                repostJson.put(String.valueOf(message.getId()),messageInfoMap);
+            }
+            System.out.println(repostJson.toString());
             send(repostJson);
         }
 

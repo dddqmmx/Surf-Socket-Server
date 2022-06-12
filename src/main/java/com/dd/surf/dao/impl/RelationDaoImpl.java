@@ -1,4 +1,4 @@
-package com.dd.surf;
+package com.dd.surf.dao.impl;
 
 import com.dd.surf.dao.RelationDao;
 import com.dd.surf.pojo.Relation;
